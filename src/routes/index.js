@@ -8,22 +8,21 @@ import { Modal } from "../Modal";
 import { Home } from "../Home";
 import { ContactServices } from "../services";
 
-export async function loader({id}) {
-  const contacts = await ContactServices.getUser(id);
-  return { contacts };
-}
+// export async function loader({id}) {
+//   const contacts = await ContactServices.getUser(id);
+//   return { contacts };
+// }
 
 
-export async function action({ request, params }) {
-  const formData = await request.formData();
-  const updates = Object.fromEntries(formData);
-  await ContactServices.updateUser(params.contactId, updates);
-  return redirect(`/${params.contactId}/edit`);
-}
+// export async function action({ request, params }) {
+//   const formData = await request.formData();
+//   const updates = Object.fromEntries(formData);
+//   await ContactServices.updateUser(params.contactId, updates);
+//   return redirect(`/${params.contactId}/edit`);
+// }
 export const routers = createBrowserRouter([
     {
     element: <App/>,
-    loader: loader,
     children:[
       {
         path: "/",
@@ -40,8 +39,6 @@ export const routers = createBrowserRouter([
           {
             path: "/:id/edit",
             element: <EditContact/>,
-            loader:loader ,
-            action:action,
           },
 
     ]

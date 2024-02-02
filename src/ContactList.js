@@ -10,35 +10,59 @@ height:60%;
 border-radius:10px;
 margin:20px 20px 20px 25%; 
 jsutify-content:center;
-`
+`;
+export const TextP = styled.p`
+padding: 2px 2px 2px 2px;
+font-size:1.25rem;
+`;
 
 
 export const ContactsList = () =>{
+    const [error, setError] = useState(false);
+    const [isLoading, setLoading] = useState(false);
     const [users, setUsers] = useState([]);
 
-    const getAllContact = async() =>{
-      try{
-        const response =  await ContactServices.getAll();
-        console.log(response)
-  
-        setUsers(response)
-        }catch(e){
-          console.log(e);
-        }
-    }
+   
     useEffect(()=>{
-        getAllContact()
+        const getAllContact = async() =>{
+            setLoading(true);
+            try{
+              const response =  await ContactServices.getAll();
+
+        
+              setUsers(response)
+              setLoading(false);
+              }catch(e){
+                setError(e);
+              }finally{
+                setLoading(false)
+              }
+          }
+          getAllContact();
     }, [])
+
+    if(isLoading) {
+        return <TextP>Loading...</TextP>
+    }
+
+    if(error) {
+        return <TextP>Algo esta errado que Nao esta certo...</TextP>
+    }
     
     return(
         <Container>
-            {
-                users.length === 0 ? <p>Carregando...</p>:(
-                    users.map((user) =>(
-                        <Contacts key={user.id} name={user.name} id={user.id}/>
-                    ))
-                )
-            }
+        {
+          (users || []).lenght === 0? (
+                <TextP>Sem contato.</TextP>
+
+            ):( users.map((user) =>(
+                    <Contacts key={user.id} name={user.name} id={user.id}/>
+                ))
+            )
+        }
+                  
+                
+            
             
         </Container>
     )

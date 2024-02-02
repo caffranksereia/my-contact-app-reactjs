@@ -1,6 +1,7 @@
-import styled from "styled-components"
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import styled from "styled-components";
+import { Link, useParams } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import {useLocation} from 'react-router-dom';
 import { ContactServices } from "./services";
 
 export const WrapperModal = styled.div`
@@ -166,19 +167,27 @@ width:100%;
 
 `;
 
-export const  NewContacts =() =>{
+
+export const EditComponent = ({id}) =>{
+    const [data, setData] = useState();
     const [age, setAge] = useState();
     const [name, setName] = useState();
     const [phone_number, setPhone] = useState([])
     const [message, setMessage] = useState();
     const [errorMessage, setErrorMenssage] = useState(false);
     const [viewMessage , setViewMessage ] = useState(false)
-    const newContact =async (e) =>{
+
+    const findId = async ()=>{
+        let data = await ContactServices.getUser(id);
+    
+        return setData(data);
+    }
+    const updataData =async (e) =>{
         e.preventDefault();
         
         try{
         
-            const data = await ContactServices.createUser(name, age,phone_number);
+            const data = await ContactServices.updateUser(id,name, age,phone_number);
             console.log(phone_number)
             setViewMessage(true)
             return setMessage(data)
@@ -190,41 +199,48 @@ export const  NewContacts =() =>{
         }
     }
 
-    return (
+    useEffect(()=>{
+        findId()
+    })
+    return(
         <WrapperModal>
-            {
+             <ButtonContainerClose>
+        <Link to={`/`}>
+        <Button>X</Button>
+        </Link>
+        
+        </ButtonContainerClose>
+        
+        <ContainerTitle>
+        {
                 viewMessage || viewMessage === null ?    <DivMessageCreated >
                 <TextPMessage>{message}</TextPMessage>
                 </DivMessageCreated>: <DivMessageError >
                 <TextPMessage>{errorMessage}</TextPMessage>
                 </DivMessageError>
             }
-         <ContainerTitle>
-                    <TextP>Name: </TextP>
-                    <Div >
-                        <InputName  onChange={(e) => setName(e.target.value)}/>
-                    </Div>
-                    
-                </ContainerTitle>
-                 <ContainerP>
-                    <TextP>idade: </TextP>
-                    <Input  onChange={(e) => setAge(e.target.value)}/>
-                </ContainerP>
-                <Wrapper>
-                    <ContainerPhoneTitule>
-                        <TextPhone>Phones:</TextPhone>
-                    </ContainerPhoneTitule>
-                    <ContainerPhones>
-                        <InputPhone onChange={(e) => setPhone(e.target.value)}></InputPhone>
-                    </ContainerPhones>
-                </Wrapper>
-                <ButtonContainer>
-                    <Button onClick={(e) => newContact(e) }>Save</Button>
-                    <Link to={'/'}>
-                    <Button>Back</Button>
-                    </Link>
-                    
-                </ButtonContainer>
+            <TextP>Name: </TextP>
+            <Div >
+            <InputName  onChange={(e) => setName(e.target.value)} />
+            </Div>
+            
+        </ContainerTitle>
+         <ContainerP>
+            <TextP>idade: </TextP>
+            <Input onChange={(e) => setAge(e.target.value)}/>
+        </ContainerP>
+        <Wrapper>
+            <ContainerPhoneTitule>
+                <TextPhone>Phones:</TextPhone>
+            </ContainerPhoneTitule>
+            <ContainerPhones>
+                <InputPhone onChange={(e) => setPhone(e.target.value)} />
+            </ContainerPhones>
+        </Wrapper>
+        <ButtonContainer>
+            <Button onClick={(e)=> updataData(e) }>Save</Button>
+        </ButtonContainer>
         </WrapperModal>
+       
     )
 }

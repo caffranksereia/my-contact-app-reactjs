@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import styled from "styled-components"
+import { ContactServices } from "./services";
 
 export const Wrapper = styled.div`
 display:flex;
@@ -36,10 +37,12 @@ height: 20px;
 export const Search = ({setResult})=>{
     const [input, setInput] = useState("")
 
-
+  const getAllContacts = (value) =>{
+     fetch('http://localhost:3000/api/v1/contact').then((response)=>response.json).then((json)=>console.log(json));
+  }
     const handleChange = (value) => {
         setInput(value);
-        console.log(value)
+        getAllContacts(value)
       };
     return(
         <Wrapper>

@@ -61,7 +61,7 @@ export const Contacts = ({id,name}) =>{
     return( 
         <Container>
             <ContainerContact>
-                <TextP>{name}</TextP>
+                <TextP>{id}:{name}</TextP>
             </ContainerContact>
             <ButtonContainer>
                 <Link to={`/${id}/edit`}>
