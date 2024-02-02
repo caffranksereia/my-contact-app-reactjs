@@ -1,8 +1,6 @@
-import GlobalStyled from "./globalStyled";
 import { Header } from "./Header";
 import styled from "styled-components";
 import { ContactsList } from "./ContactList";
-import { Outlet } from "react-router-dom";
 
 
 export const Wrapper = styled.div`
@@ -22,12 +20,12 @@ font-size:1.25rem;
 
 `
 
-const App = () =>{
-  return (
-    <Wrapper>
-     <Outlet/>
-    </Wrapper>
-  );
-}
 
-export default App;
+export const Home = () =>{
+    return (
+      <Wrapper>
+        <Header/>
+        <ContactsList/>
+      </Wrapper>
+    );
+  }
